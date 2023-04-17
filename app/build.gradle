@@ -23,7 +23,7 @@ application {
 
 jacocoTestReport {
     reports {
-        xml.required = true
+        xml.enabled  true
     }
 }
 
