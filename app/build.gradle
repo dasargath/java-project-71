@@ -1,6 +1,9 @@
 plugins {
     id 'java'
     id 'application'
+    id 'checkstyle'
+    id 'jacoco'
+    id 'com.adarshr.test-logger' version '3.2.0'
 }
 
 group = 'hexlet.code'
@@ -18,9 +21,20 @@ application {
     mainClass = 'hexlet.code.App'
 }
 
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+
+checkstyle {
+    toolVersion '9.2.1'
+}
+
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
     implementation 'info.picocli:picocli:4.7.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 }

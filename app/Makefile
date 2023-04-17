@@ -1,2 +1,3 @@
+.PHONY: build
 run-dist:
-	./build/install/app/bin/app $(ARGS)
+	./build/install/app/bin/app
