@@ -4,4 +4,4 @@ run-dist:
 
 .PHONY: report
 report:
-	./gradlew jacocoTestReport
+	./app/gradlew jacocoTestReport
