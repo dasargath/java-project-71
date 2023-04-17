@@ -2,6 +2,5 @@
 run-dist:
 	./build/install/app/bin/app
 
-.PHONY: report
 report:
-	./app/gradlew jacocoTestReport
+	./gradlew jacocoTestReport
