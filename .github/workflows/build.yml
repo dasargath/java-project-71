@@ -31,7 +31,7 @@ jobs:
         build-root-directory: app
 
     - name: Generate JaCoCo report
-      run: make report
+      run: ./gradlew jacocoTestReport
 
     - name: Publish code coverage
       uses: paambaati/codeclimate-action@v2.7.4
