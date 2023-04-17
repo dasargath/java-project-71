@@ -29,11 +29,10 @@ jobs:
       with:
         arguments: build
         build-root-directory: app
-        
+
     - name: Generate JaCoCo report
-      run: ./gradlew jacocoTestReport
-      working-directory: ${{github.workspace}}/app
-      
+      run: make report
+
     - name: Publish code coverage
       uses: paambaati/codeclimate-action@v2.7.4
       env:
