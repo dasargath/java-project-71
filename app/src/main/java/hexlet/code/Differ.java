@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -12,8 +13,12 @@ public class Differ {
         String fileContent1 = Files.readString(Path.of(filepath1));
         String fileContent2 = Files.readString(Path.of(filepath2));
 
-        Map<String, Object> jsonData1 = new ObjectMapper().readValue(fileContent1, Map.class);
-        Map<String, Object> jsonData2 = new ObjectMapper().readValue(fileContent2, Map.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        TypeReference<Map<String, Object>> typeRef1 = new TypeReference<Map<String, Object>>() { };
+        TypeReference<Map<String, Object>> typeRef2 = new TypeReference<Map<String, Object>>() { };
+        Map<String, Object> jsonData1 = objectMapper.readValue(fileContent1, typeRef1);
+        Map<String, Object> jsonData2 = objectMapper.readValue(fileContent2, typeRef2);
 
         return FindChanges.compareJSONS(jsonData1, jsonData2);
     }

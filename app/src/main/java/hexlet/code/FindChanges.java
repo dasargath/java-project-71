@@ -1,8 +1,8 @@
 package hexlet.code;
 
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class FindChanges {
     public static String compareJSONS(Map<String, Object> jsonData1, Map<String, Object> jsonData2) {
@@ -15,35 +15,35 @@ public class FindChanges {
         Set<String> keys = sortedDataMap.keySet();
         int count = 0;
         for (String key : keys) {
-            if (count == 0) {
-                compareOutput.append("\n");
+            if (count > 0) {
+                compareOutput.append(",");
             }
-            count++;
-            String sign = "  ";
+            compareOutput.append("\n");
+
             Object value1 = jsonData1.get(key);
             Object value2 = jsonData2.get(key);
-
-            if (value1 == null) {
-                sign = "+ ";
-            } else if (value2 == null) {
-                sign = "- ";
-            } else if (!value1.equals(value2)) {
-                compareOutput.append("- ").append(quoteIfNeeded(key)).append(": ").append(quoteIfNeeded(value1))
-                        .append(",\n");
-                sign = "+ ";
-            }
-            compareOutput.append(sign).append(quoteIfNeeded(key)).append(": ")
-                    .append(quoteIfNeeded(value2 != null ? value2 : value1));
-
-            if (count < keys.size()) {
-                compareOutput.append(",\n");
-            }
+            compareOutput.append(generateComparisonLine(key, value1, value2));
+            count++;
         }
+
         if (!keys.isEmpty()) {
             compareOutput.append("\n");
         }
         compareOutput.append("}");
         return compareOutput.toString().trim();
+    }
+
+    private static String generateComparisonLine(String key, Object value1, Object value2) {
+        if (value1 == null) {
+            return String.format("+ %s: %s", quoteIfNeeded(key), quoteIfNeeded(value2));
+        } else if (value2 == null) {
+            return String.format("- %s: %s", quoteIfNeeded(key), quoteIfNeeded(value1));
+        } else if (!value1.equals(value2)) {
+            return String.format("- %s: %s,\n+ %s: %s", quoteIfNeeded(key), quoteIfNeeded(value1), quoteIfNeeded(key),
+                    quoteIfNeeded(value2));
+        } else {
+            return String.format("  %s: %s", quoteIfNeeded(key), quoteIfNeeded(value1));
+        }
     }
 
     private static String quoteIfNeeded(Object value) {
