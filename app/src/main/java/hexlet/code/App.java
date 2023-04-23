@@ -21,7 +21,7 @@ public class App implements Callable<Integer> {
     private String filePath2;
 
     @Option(names = {"-f", "--format"}, description = "output format [default: stylish]")
-    private String formatName = "stylish";
+    private String format = "stylish";
 
     public static void main(String... args) {
         int exitCode = new CommandLine(new App()).execute(args);
@@ -31,10 +31,23 @@ public class App implements Callable<Integer> {
     @Override
     public Integer call() {
         try {
-            System.out.println(Differ.generate(filePath1, filePath2, formatName));
+            System.out.println(Differ.generate(getFilepath1(), getFilepath2(), getFormat()));
             return SUCCESS_OUTPUT;
         } catch (Exception e) {
+            System.out.println("File " + e.getMessage() + " can not be found.");
             return ERROR_OUTPUT;
         }
+    }
+
+    public String getFilepath1() {
+        return filePath1;
+    }
+
+    public String getFilepath2() {
+        return filePath2;
+    }
+
+    public String getFormat() {
+        return format;
     }
 }

@@ -4,3 +4,5 @@ run-dist:
 
 report:
 	./gradlew jacocoTestReport
+test:
+	./gradlew test
