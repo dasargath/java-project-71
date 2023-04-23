@@ -28,6 +28,11 @@ public class App implements Callable<Integer> {
         System.exit(exitCode);
     }
 
+    /**
+     * Executes the gendiff comparison operation. Returns SUCCESS_OUTPUT if successful, ERROR_OUTPUT otherwise.
+     * Subclasses can override this method for a custom implementation.
+     */
+
     @Override
     public Integer call() throws Exception {
         try {
