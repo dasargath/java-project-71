@@ -15,10 +15,10 @@ public class App implements Callable<Integer> {
     private static final int ERROR_OUTPUT = 1;
 
     @Parameters(index = "0", description = "path to first file.")
-    private String filePath1;
+    private String filepath1;
 
     @Parameters(index = "1", description = "path to second file.")
-    private String filePath2;
+    private String filepath2;
 
     @Option(names = {"-f", "--format"}, description = "output format [default: stylish]")
     private String format = "stylish";
@@ -29,25 +29,13 @@ public class App implements Callable<Integer> {
     }
 
     @Override
-    public Integer call() {
+    public Integer call() throws Exception {
         try {
-            System.out.println(Differ.generate(getFilepath1(), getFilepath2(), getFormat()));
+            System.out.println(Differ.generate(filepath1, filepath2, format));
             return SUCCESS_OUTPUT;
         } catch (Exception e) {
             System.out.println("File " + e.getMessage() + " can not be found.");
             return ERROR_OUTPUT;
         }
-    }
-
-    public String getFilepath1() {
-        return filePath1;
-    }
-
-    public String getFilepath2() {
-        return filePath2;
-    }
-
-    public String getFormat() {
-        return format;
     }
 }
