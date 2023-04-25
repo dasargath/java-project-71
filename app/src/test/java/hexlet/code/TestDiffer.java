@@ -29,6 +29,11 @@ public class TestDiffer {
 
     /**
      * Checks if the output for the default input files matches the JSON/YML format.
+     *
+     * @param format         The file format ("json" or "yml").
+     * @param file1          The first input file.
+     * @param file2          The second input file.
+     * @param expectedResult The expected result variable name.
      */
     @ParameterizedTest
     @CsvSource({"json, file1.json, file2.json, expectedJson", "yml, file1.yml, file2.yml, expectedYml"})
@@ -39,6 +44,11 @@ public class TestDiffer {
 
     /**
      * Checks if the output for the default input files matches the plain format.
+     *
+     * @param format         The file format ("json" or "yml").
+     * @param file1          The first input file.
+     * @param file2          The second input file.
+     * @param expectedResult The expected result variable name.
      */
     @ParameterizedTest
     @CsvSource({"json, fileLong1.json, fileLong2.json, plain", "yml, fileLong1.yml, fileLong2.yml, plain"})
@@ -49,6 +59,11 @@ public class TestDiffer {
 
     /**
      * Checks if the output for the default input files matches the JSON/YML format using the "json" flag.
+     *
+     * @param format         The file format ("json" or "yml").
+     * @param file1          The first input file.
+     * @param file2          The second input file.
+     * @param expectedResult The expected result variable name.
      */
     @ParameterizedTest
     @CsvSource({"json, file1.json, file2.json, outputJson.json", "yml, file1.yml, file2.yml, outputJson.json"})
@@ -59,6 +74,11 @@ public class TestDiffer {
 
     /**
      * Checks if the output for the long input files matches the JSON/YML format.
+     *
+     * @param format         The file format ("json" or "yml").
+     * @param fileLong1      The first input file.
+     * @param fileLong2      The second input file.
+     * @param expectedResult The expected result variable name.
      */
     @ParameterizedTest
     @CsvSource({"json, fileLong1.json, fileLong2.json, expectedLongStylishJson",
@@ -71,6 +91,10 @@ public class TestDiffer {
 
     /**
      * Checks if an IllegalArgumentException is thrown if both files are empty.
+     *
+     * @param format The file format ("json" or "yml").
+     * @param file1  The first input file.
+     * @param file2  The second input file.
      */
     @ParameterizedTest
     @CsvSource({"json, empty1.json, empty2.json", "yml, empty1.yml, empty2.yml"})
@@ -81,6 +105,12 @@ public class TestDiffer {
 
     /**
      * Checks if an IllegalArgumentException is thrown if one of the files is empty.
+     *
+     * @param format    The file format ("json" or "yml").
+     * @param emptyFile The empty input file.
+     * @param file1     The first input file.
+     * @param file2     The second input file.
+     * @param file3     The third input file.
      */
     @ParameterizedTest
     @CsvSource({"json, empty1.json, file2.json, file1.json, empty1.json",
