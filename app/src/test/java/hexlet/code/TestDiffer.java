@@ -1,118 +1,80 @@
 package hexlet.code;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
 public class TestDiffer {
-    private final String filePathJson1 = ("src/test/resources/file1.json");
-    private final String filePathJson2 = ("src/test/resources/file2.json");
-    private final String filePathYml1 = ("src/test/resources/file1.yml");
-    private final String filePathYml2 = ("src/test/resources/file2.yml");
-    private final String filePathEmptyJson1 = ("src/test/resources/empty1.json");
-    private final String filePathEmptyJson2 = ("src/test/resources/empty2.json");
-    private final String filePathEmptyYml1 = ("src/test/resources/empty1.yml");
-    private final String filePathEmptyYml2 = ("src/test/resources/empty2.yml");
 
-    @Test
-    public void testBothEmptyJson() {
-        assertThrows(IllegalArgumentException.class, () -> Differ.generate(filePathEmptyJson1, filePathEmptyJson2));
-    }
-    @Test
-    public void testBothEmptyYml() {
-        assertThrows(IllegalArgumentException.class, () -> Differ.generate(filePathEmptyYml1, filePathEmptyYml2));
-    }
+    private static String expectedJson;
+    private static String expectedYml;
+    private static String expectedLongJson;
+    private static String expectedLongYml;
+    private static String expectedOutputJson;
+    private static String expectedPlain;
 
-    @Test
-    public void testOneEmptyJson() {
-        assertThrows(IllegalArgumentException.class, () -> Differ.generate(filePathEmptyJson1, filePathJson2));
-        assertThrows(IllegalArgumentException.class, () -> Differ.generate(filePathJson1, filePathEmptyJson1));
+    @BeforeAll
+    public static void beforeAll() throws Exception {
+        expectedJson = Files.readString(Paths.get("src/test/resources/expectedJson.json"));
+        expectedYml = Files.readString(Paths.get("src/test/resources/expectedYml"));
+        expectedLongJson = Files.readString(Paths.get("src/test/resources/expectedLongStylishJson"));
+        expectedLongYml = Files.readString(Paths.get("src/test/resources/expectedLongStylishYml"));
+        expectedOutputJson = Files.readString(Paths.get("src/test/resources/outputJson.json"));
+        expectedPlain = Files.readString(Paths.get("src/test/resources/plain"));
     }
 
-    @Test
-    public void testOneEmptyYml() {
-        assertThrows(IllegalArgumentException.class, () -> Differ.generate(filePathEmptyYml1, filePathYml2));
-        assertThrows(IllegalArgumentException.class, () -> Differ.generate(filePathYml1, filePathEmptyYml1));
+    @ParameterizedTest
+    @CsvSource({"json, file1.json, file2.json, expectedJson", "yml, file1.yml, file2.yml, expectedYml"})
+    public void testDefault(String format, String file1, String file2, String expectedResult) throws Exception {
+        String actual = Differ.generate(getResourcePath(file1), getResourcePath(file2));
+        assertEquals(actual, format.equals("json") ? expectedJson : expectedYml);
     }
 
-    @Test
-    public void testDefaultJson() throws Exception {
-        String actual = Differ.generate(filePathJson1, filePathJson2);
-        String expected = Files.readString(Paths.get("src/test/resources/expectedJson.json"));
-        assertEquals(actual, expected);
+    @ParameterizedTest
+    @CsvSource({"json, fileLong1.json, fileLong2.json, plain", "yml, fileLong1.yml, fileLong2.yml, plain"})
+    public void testFormatToPlain(String format, String file1, String file2, String expectedResult) throws Exception {
+        String actual = Differ.generate(getResourcePath(file1), getResourcePath(file2), "plain");
+        assertEquals(actual, expectedPlain);
     }
 
-    @Test
-    public void testDefaultYml() throws Exception {
-        String actual = Differ.generate(filePathYml1, filePathYml2);
-        String expected = Files.readString(Paths.get("src/test/resources/expectedYml"));
-        assertEquals(actual, expected);
+    @ParameterizedTest
+    @CsvSource({"json, file1.json, file2.json, outputJson.json", "yml, file1.yml, file2.yml, outputJson.json"})
+    public void testFormatToJson(String format, String file1, String file2, String expectedResult) throws Exception {
+        String actual = Differ.generate(getResourcePath(file1), getResourcePath(file2), "json");
+        assertEquals(actual, expectedOutputJson);
     }
 
-    @Test
-    public void testJsonLong() throws Exception {
-        String filepath3Json = ("src/test/resources/fileLong1.json");
-        String filepath4Json = ("src/test/resources/fileLong2.json");
-        String expected = Files.readString(Paths.get("src/test/resources/expectedLongStylishJson"));
-        String actual = Differ.generate(filepath3Json, filepath4Json);
-        assertEquals(actual, expected);
+    @ParameterizedTest
+    @CsvSource({"json, fileLong1.json, fileLong2.json, expectedLongStylishJson",
+        "yml, fileLong1.yml, fileLong2.yml, expectedLongStylishYml"})
+    public void testLongFormats(String format, String fileLong1, String fileLong2, String expectedResult)
+            throws Exception {
+        String actual = Differ.generate(getResourcePath(fileLong1), getResourcePath(fileLong2));
+        assertEquals(actual, format.equals("json") ? expectedLongJson : expectedLongYml);
     }
 
-    @Test
-    public void testYmlLong() throws Exception {
-        String filepath3Yml = ("src/test/resources/fileLong1.yml");
-        String filepath4Yml = ("src/test/resources/fileLong2.yml");
-        String actual = Differ.generate(filepath3Yml, filepath4Yml);
-        String expected = Files.readString(Paths.get("src/test/resources/expectedLongStylishYml"));
-        assertEquals(actual, expected);
+    @ParameterizedTest
+    @CsvSource({"json, empty1.json, empty2.json", "yml, empty1.yml, empty2.yml"})
+    public void testBothEmpty(String format, String file1, String file2) {
+        assertThrows(IllegalArgumentException.class, () -> Differ.generate(getResourcePath(file1),
+                getResourcePath(file2)));
     }
 
-    @Test
-    public void testJsonToPlain() throws Exception {
-        String filepath3Json = ("src/test/resources/fileLong1.json");
-        String filepath4Json = ("src/test/resources/fileLong2.json");
-        String actual = Differ.generate(filepath3Json, filepath4Json, "plain");
-        String expected = Files.readString(Paths.get("src/test/resources/plain"));
-        assertEquals(actual, expected);
+    @ParameterizedTest
+    @CsvSource({"json, empty1.json, file2.json, file1.json, empty1.json",
+        "yml, empty1.yml, file2.yml, file1.yml, empty1.yml"})
+    public void testOneEmpty(String format, String emptyFile, String file1, String file2, String file3) {
+        assertThrows(IllegalArgumentException.class, () -> Differ.generate(getResourcePath(emptyFile),
+                getResourcePath(file1)));
+        assertThrows(IllegalArgumentException.class, () -> Differ.generate(getResourcePath(file2),
+                getResourcePath(file3)));
     }
 
-    @Test
-    public void testYmlToPlain() throws Exception {
-        String filepath3Yml = ("src/test/resources/fileLong1.yml");
-        String filepath4Yml = ("src/test/resources/fileLong2.yml");
-        String actual = Differ.generate(filepath3Yml, filepath4Yml, "plain");
-        String expected = Files.readString(Paths.get("src/test/resources/plain"));
-        assertEquals(actual, expected);
-    }
-
-    @Test
-    public void testJsonToJson() throws Exception {
-        String actual = Differ.generate(filePathJson1, filePathJson2, "json");
-        String expected = Files.readString(Paths.get("src/test/resources/json"));
-        assertEquals(actual, expected);
-    }
-
-    @Test
-    public void testYmlToJson() throws Exception {
-        String actual = Differ.generate(filePathYml1, filePathYml2, "json");
-        String expected = Files.readString(Paths.get("src/test/resources/json"));
-        assertEquals(actual, expected);
-    }
-
-    @Test
-    public void testStylishJson() throws Exception {
-        String actual = Differ.generate(filePathJson1, filePathJson2, "stylish");
-        String expected = Files.readString(Paths.get("src/test/resources/expectedJson.json"));
-        assertEquals(actual, expected);
-    }
-
-    @Test
-    public void testStylishYml() throws Exception {
-        String actual = Differ.generate(filePathYml1, filePathYml2, "stylish");
-        String expected = Files.readString(Paths.get("src/test/resources/expectedYml"));
-        assertEquals(actual, expected);
+    private String getResourcePath(String fileName) {
+        return Paths.get("src/test/resources", fileName).toString();
     }
 }

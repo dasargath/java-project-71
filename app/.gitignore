@@ -1,4 +1,4 @@
-.gradle
+.gradle/
 build/
 **/logs/
 .settings
@@ -16,7 +16,7 @@ out/
 .vscode/
 
 ### Mac OS ###
-.DS_Store
-../.DS_Store
+**/.DS_Store
+
 .ssh
 ../.ssh

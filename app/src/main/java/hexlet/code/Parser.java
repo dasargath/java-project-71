@@ -10,8 +10,8 @@ public class Parser {
     private static final ObjectMapper OBJECT_MAPPER_JSON = new ObjectMapper();
     private static final ObjectMapper OBJECT_MAPPER_YAML = new ObjectMapper(new YAMLFactory());
 
-    public static Map<String, Object> parse(String content, String formatFile) throws Exception {
-        String format = formatFile.toLowerCase();
+    public static Map<String, Object> parse(String content, String formatType) throws Exception {
+        String format = formatType.toLowerCase();
         switch (format) {
             case "json" -> {
                 return parseJson(content);
@@ -19,7 +19,7 @@ public class Parser {
             case "yml", "yaml" -> {
                 return parseYml(content);
             }
-            default -> throw new Exception("Unknown format: '" + formatFile + "'");
+            default -> throw new Exception("Unknown format: '" + formatType + "'");
         }
     }
 
