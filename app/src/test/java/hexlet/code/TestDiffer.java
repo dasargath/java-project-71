@@ -27,6 +27,9 @@ public class TestDiffer {
         expectedPlain = Files.readString(Paths.get("src/test/resources/plain"));
     }
 
+    /**
+     * Checks if the output for the default input files matches the JSON/YML format.
+     */
     @ParameterizedTest
     @CsvSource({"json, file1.json, file2.json, expectedJson", "yml, file1.yml, file2.yml, expectedYml"})
     public void testDefault(String format, String file1, String file2, String expectedResult) throws Exception {
@@ -34,6 +37,9 @@ public class TestDiffer {
         assertEquals(actual, format.equals("json") ? expectedJson : expectedYml);
     }
 
+    /**
+     * Checks if the output for the default input files matches the plain format.
+     */
     @ParameterizedTest
     @CsvSource({"json, fileLong1.json, fileLong2.json, plain", "yml, fileLong1.yml, fileLong2.yml, plain"})
     public void testFormatToPlain(String format, String file1, String file2, String expectedResult) throws Exception {
@@ -41,6 +47,9 @@ public class TestDiffer {
         assertEquals(actual, expectedPlain);
     }
 
+    /**
+     * Checks if the output for the default input files matches the JSON/YML format using the "json" flag.
+     */
     @ParameterizedTest
     @CsvSource({"json, file1.json, file2.json, outputJson.json", "yml, file1.yml, file2.yml, outputJson.json"})
     public void testFormatToJson(String format, String file1, String file2, String expectedResult) throws Exception {
@@ -48,6 +57,9 @@ public class TestDiffer {
         assertEquals(actual, expectedOutputJson);
     }
 
+    /**
+     * Checks if the output for the long input files matches the JSON/YML format.
+     */
     @ParameterizedTest
     @CsvSource({"json, fileLong1.json, fileLong2.json, expectedLongStylishJson",
         "yml, fileLong1.yml, fileLong2.yml, expectedLongStylishYml"})
@@ -57,6 +69,9 @@ public class TestDiffer {
         assertEquals(actual, format.equals("json") ? expectedLongJson : expectedLongYml);
     }
 
+    /**
+     * Checks if an IllegalArgumentException is thrown if both files are empty.
+     */
     @ParameterizedTest
     @CsvSource({"json, empty1.json, empty2.json", "yml, empty1.yml, empty2.yml"})
     public void testBothEmpty(String format, String file1, String file2) {
@@ -64,6 +79,9 @@ public class TestDiffer {
                 getResourcePath(file2)));
     }
 
+    /**
+     * Checks if an IllegalArgumentException is thrown if one of the files is empty.
+     */
     @ParameterizedTest
     @CsvSource({"json, empty1.json, file2.json, file1.json, empty1.json",
         "yml, empty1.yml, file2.yml, file1.yml, empty1.yml"})
