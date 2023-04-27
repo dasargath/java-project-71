@@ -21,7 +21,7 @@ public class App implements Callable<Integer> {
     private String filepath2;
 
     @Option(names = {"-f", "--format"}, defaultValue = "stylish", description = "output format")
-    private String format = "stylish";
+    private String format;
 
     public static void main(String... args) {
         int exitCode = new CommandLine(new App()).execute(args);
